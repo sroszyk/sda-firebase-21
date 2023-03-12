@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -80,7 +80,7 @@ document.getElementById("myBtn").addEventListener("click", () => {
   const file = document.getElementById("myFile").files[0];
   let fileName = file.name;
 
-  if(fileNameInput.value){
+  if (fileNameInput.value) {
     fileName = fileNameInput.value;
   }
 
@@ -90,3 +90,29 @@ document.getElementById("myBtn").addEventListener("click", () => {
     headerInfo.innerText = "Zdjęcie przesłano!";
   })
 })
+
+//1. Dodac Input do podawania nazwy obrazka
+//2. Dodac przycisk do wyswietlania obrazka
+//3. Na klikniecie przycisku wyswietlic zdjecie
+//4. Przekazac nazwe do refa
+//5. Wyswietlic blad w headerInfo
+
+const myShowFileNameInput = document.getElementById("myShowFileName");
+const showFileBtn = document.getElementById("showPhotoBtn");
+const img = document.createElement("img");
+
+showFileBtn.addEventListener("click", () => {
+  const imageRef = ref(storage, myShowFileNameInput.value);
+
+  headerInfo.innerText = "";
+
+  getDownloadURL(imageRef).then(url => {
+    img.src = url;
+    img.style.width = "250px";
+    document.body.appendChild(img);
+  })
+    .catch(ex => {
+      headerInfo.innerText = "FOTO NIE ISTNIEJE!!!";
+    });
+});
+
