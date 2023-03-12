@@ -132,10 +132,11 @@ listAll(storageRef).then(res => {
     const myBtn = document.createElement("button");
 
     myBtn.addEventListener("click", () => {
-      // tworzymy refa do obrazka - ref + storage + nazwa_pliku
-      // wyswietlamy tego refa
       const imageRef = ref(storage, res.items[i].name);
-      console.log(imageRef);
+
+      getDownloadURL(imageRef).then(url => {
+        console.log(url);
+      });
     })
 
     myBtn.innerText = "Show photo!";
