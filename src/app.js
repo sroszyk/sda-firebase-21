@@ -59,7 +59,7 @@ document.getElementById("myBtn").addEventListener("click", () => {
   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
   const file = document.getElementById("myFile").files[0];
-  const imageRef = ref(storage, "folder/imageNew.jpg");
+  const imageRef = ref(storage, file.name);
 
   uploadBytes(imageRef, file).then(() => {
     headerInfo.innerText = "Zdjęcie przesłano!";
