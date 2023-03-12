@@ -54,12 +54,15 @@ const storage = getStorage(app);
 //3. Do przycisku obsluga klikniecia 
 //4. Jako callback wywolujemy linijki z prezentacji
 
+const headerInfo = document.getElementById("myHeader");
 document.getElementById("myBtn").addEventListener("click", () => {
+  headerInfo.innerText = "Przesyłam zdjęcię....!";
+
   const file = document.getElementById("myFile").files[0];
-  const imageRef = ref(storage, "imageNew.jpg");
+  const imageRef = ref(storage, "folder/imageNew.jpg");
 
   uploadBytes(imageRef, file).then(() => {
-    console.log("Sukces!");
+    headerInfo.innerText = "Zdjęcie przesłano!";
   })
 })
 
