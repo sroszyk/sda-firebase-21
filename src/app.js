@@ -129,8 +129,12 @@ listAll(storageRef).then(res => {
 
   for (let i = 0; i < res.items.length; i++) {
     const myLi = document.createElement("li");
+    const myBtn = document.createElement("button");
+
+    myBtn.innerText = "Show photo!";
     myLi.innerText = res.items[i].name;
+
+    myLi.appendChild(myBtn);
     myOl.appendChild(myLi);
-    console.log(res.items[i].name);
   }
 });
