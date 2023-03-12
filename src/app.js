@@ -54,16 +54,39 @@ const storage = getStorage(app);
 //3. Do przycisku obsluga klikniecia 
 //4. Jako callback wywolujemy linijki z prezentacji
 
+// const headerInfo = document.getElementById("myHeader");
+// document.getElementById("myBtn").addEventListener("click", () => {
+//   headerInfo.innerText = "Przesyłam zdjęcię....!";
+
+//   const file = document.getElementById("myFile").files[0];
+//   const imageRef = ref(storage, file.name);
+
+//   uploadBytes(imageRef, file).then(() => {
+//     headerInfo.innerText = "Zdjęcie przesłano!";
+//   })
+// })
+
+
+// 1. Dodać input do HTMLa
+// 2. Pobrac wpisana nazwe z inputa
+// 3. Przekazac jako argument do funckji
+// 4. Fallback do domyślnej nazwy pliku
 const headerInfo = document.getElementById("myHeader");
+const fileNameInput = document.getElementById("myFileName");
+
 document.getElementById("myBtn").addEventListener("click", () => {
   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
   const file = document.getElementById("myFile").files[0];
-  const imageRef = ref(storage, file.name);
+  let fileName = file.name;
+
+  if(fileNameInput.value){
+    fileName = fileNameInput.value;
+  }
+
+  const imageRef = ref(storage, fileName);
 
   uploadBytes(imageRef, file).then(() => {
     headerInfo.innerText = "Zdjęcie przesłano!";
   })
 })
-
-
