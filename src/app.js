@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -71,31 +71,31 @@ const storage = getStorage(app);
 // 2. Pobrac wpisana nazwe z inputa
 // 3. Przekazac jako argument do funckji
 // 4. Fallback do domyślnej nazwy pliku
-const headerInfo = document.getElementById("myHeader");
-const fileNameInput = document.getElementById("myFileName");
+// const headerInfo = document.getElementById("myHeader");
+// const fileNameInput = document.getElementById("myFileName");
 
-document.getElementById("myBtn").addEventListener("click", () => {
-  headerInfo.innerText = "Przesyłam zdjęcię....!";
+// document.getElementById("myBtn").addEventListener("click", () => {
+//   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
-  const file = document.getElementById("myFile").files[0];
-  let fileName = file.name;
+//   const file = document.getElementById("myFile").files[0];
+//   let fileName = file.name;
 
-  if (fileNameInput.value) {
-    fileName = fileNameInput.value;
-  }
+//   if (fileNameInput.value) {
+//     fileName = fileNameInput.value;
+//   }
 
-  const imageRef = ref(storage, fileName);
+//   const imageRef = ref(storage, fileName);
 
-  uploadBytes(imageRef, file).then(() => {
-    headerInfo.innerText = "Zdjęcie przesłano!";
-    
-    getDownloadURL(imageRef).then(url => {
-      const img = document.getElementById("myPhoto");
-      img.src = url;
-      img.style.width = "250px";
-    })
-  })
-})
+//   uploadBytes(imageRef, file).then(() => {
+//     headerInfo.innerText = "Zdjęcie przesłano!";
+
+//     getDownloadURL(imageRef).then(url => {
+//       const img = document.getElementById("myPhoto");
+//       img.src = url;
+//       img.style.width = "250px";
+//     })
+//   })
+// })
 
 //1. Dodac Input do podawania nazwy obrazka
 //2. Dodac przycisk do wyswietlania obrazka
@@ -112,13 +112,25 @@ document.getElementById("myBtn").addEventListener("click", () => {
 
 //   headerInfo.innerText = "";
 
-  // getDownloadURL(imageRef).then(url => {
-  //   img.src = url;
-  //   img.style.width = "250px";
-  //   document.body.appendChild(img);
-  // })
+// getDownloadURL(imageRef).then(url => {
+//   img.src = url;
+//   img.style.width = "250px";
+//   document.body.appendChild(img);
+// })
 //     .catch(ex => {
 //       headerInfo.innerText = "FOTO NIE ISTNIEJE!!!";
 //     });
 // });
 
+
+const storageRef = ref(storage);
+listAll(storageRef).then(res => {
+  const myOl = document.getElementById("photoList");
+
+  for (let i = 0; i < res.items.length; i++) {
+    const myLi = document.createElement("li");
+    myLi.innerText = res.items[i].name;
+    myOl.appendChild(myLi);
+    console.log(res.items[i].name);
+  }
+});
