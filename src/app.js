@@ -42,3 +42,9 @@ document.body.appendChild(img);
 fetch("https://reqres.in/api/users")
 .then((daneZPromisa) => daneZPromisa.json())
 .then((daneZJson) => console.log(daneZJson.data));
+
+async function myFunc () {
+  const data = await fetch("https://reqres.in/api/users")
+  const users = await data.json();
+  console.log(users.data);
+}
