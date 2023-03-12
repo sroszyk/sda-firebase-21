@@ -131,9 +131,11 @@ listAll(storageRef).then(res => {
     const myLi = document.createElement("li");
     const myBtn = document.createElement("button");
 
-    // dodajemy event do przycisku - wyswietlamy Siemanko w konsoli - addEventListener
     myBtn.addEventListener("click", () => {
-      console.log("Siemanko!");
+      // tworzymy refa do obrazka - ref + storage + nazwa_pliku
+      // wyswietlamy tego refa
+      const imageRef = ref(storage, res.items[i].name);
+      console.log(imageRef);
     })
 
     myBtn.innerText = "Show photo!";
