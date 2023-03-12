@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
-import { getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -130,6 +130,7 @@ listAll(storageRef).then(res => {
   for (let i = 0; i < res.items.length; i++) {
     const myLi = document.createElement("li");
     const myBtn = document.createElement("button");
+    const myRemoveBtn = document.createElement("button");
 
     myBtn.addEventListener("click", () => {
       const imageRef = ref(storage, res.items[i].name);
@@ -141,10 +142,21 @@ listAll(storageRef).then(res => {
       });
     })
 
+    myRemoveBtn.addEventListener("click", () => {
+      const imageRef = ref(storage, res.items[i].name);
+
+      deleteObject(imageRef).then(() => {
+        myOl.removeChild(myLi);
+        console.log("USUNIĘTO!");
+      });
+    })
+
+    myRemoveBtn.innerText = "Delete";
     myBtn.innerText = "Show photo!";
     myLi.innerText = res.items[i].name;
 
     myLi.appendChild(myBtn);
+    myLi.appendChild(myRemoveBtn);
     myOl.appendChild(myLi);
   }
 });
