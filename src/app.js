@@ -1,7 +1,7 @@
 import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -16,11 +16,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
+// const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
 
-const img = document.createElement("img");
-img.src = url;
-document.body.appendChild(img);
+// const img = document.createElement("img");
+// img.src = url;
+// document.body.appendChild(img);
 
 
 // // const mojaPupaJson = fetch().then((pupa123) => {
@@ -39,12 +39,28 @@ document.body.appendChild(img);
 //   console.log(data);
 // }
 
-fetch("https://reqres.in/api/users")
-.then((daneZPromisa) => daneZPromisa.json())
-.then((daneZJson) => console.log(daneZJson.data));
+// fetch("https://reqres.in/api/users")
+// .then((daneZPromisa) => daneZPromisa.json())
+// .then((daneZJson) => console.log(daneZJson.data));
 
-async function myFunc () {
-  const data = await fetch("https://reqres.in/api/users")
-  const users = await data.json();
-  console.log(users.data);
-}
+// async function myFunc () {
+//   const data = await fetch("https://reqres.in/api/users")
+//   const users = await data.json();
+//   console.log(users.data);
+// }
+
+//1. Dodajemy input do HTMLu - typ file
+//2. Dodajemy przycisk do HTML 
+//3. Do przycisku obsluga klikniecia 
+//4. Jako callback wywolujemy linijki z prezentacji
+
+document.getElementById("myBtn").addEventListener("click", () => {
+  const file = document.getElementById("myFile").files[0];
+  const imageRef = ref(storage, "imageNew.jpg");
+
+  uploadBytes(imageRef, file).then(() => {
+    console.log("Sukces!");
+  })
+})
+
+
