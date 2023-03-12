@@ -22,3 +22,23 @@ const img = document.createElement("img");
 img.src = url;
 document.body.appendChild(img);
 
+
+// // const mojaPupaJson = fetch().then((pupa123) => {
+// //   return pupa123.json()
+// // });
+// const mojaPupaJson = fetch().then((pupa123) => pupa123.json());
+// mojaPupaJson.then((data) => console.log(data))
+
+// fetch("https://reqres.in/api/users")
+// .then((pupa123) => pupa123.json())
+// .then((data) => console.log(data));
+
+// async function mojAsynchronicznaFunkcja() {
+//   const pupa123 = await fetch();
+//   const data = await pupa123.json();
+//   console.log(data);
+// }
+
+fetch("https://reqres.in/api/users")
+.then((daneZPromisa) => daneZPromisa.json())
+.then((daneZJson) => console.log(daneZJson.data));
