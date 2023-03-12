@@ -135,7 +135,9 @@ listAll(storageRef).then(res => {
       const imageRef = ref(storage, res.items[i].name);
 
       getDownloadURL(imageRef).then(url => {
-        console.log(url);
+        const myImg = document.getElementById("myImg");
+        myImg.src = url;
+        myImg.style.width = "200px";
       });
     })
 
