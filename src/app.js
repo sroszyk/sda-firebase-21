@@ -163,10 +163,13 @@ const storage = getStorage(app);
 
 const albumsList = document.getElementById("albumsList");
 const uploadPhotoBtn = document.getElementById("uploadPhoto");
+const fileInput = document.getElementById("fileInput");
 
 uploadPhotoBtn.addEventListener("click", () => {
   if (albumsList.value) {
-    console.log(albumsList.value);
+    const file = fileInput.files[0];
+    const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
+    uploadBytes(imageRef, file).then(() => console.log("SUKCES"));
   }
 });
 
@@ -178,3 +181,5 @@ listAll(storageRef).then(res => {
     albumsList.appendChild(albumOption);
   })
 })
+
+
