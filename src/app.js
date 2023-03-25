@@ -2,7 +2,7 @@ import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore"
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -267,4 +267,18 @@ getDocs(usersCol).then(docs => {
   });
 })
 
-
+editUserBtn.addEventListener("click", () => {
+  const userDoc = doc(db, "users", userIdHeader.innerText);
+  updateDoc(userDoc, {
+    name: nameInput.value,
+    surname: surnameInput.value,
+    age: ageInput.value
+  }).then(() => {
+    userIdHeader.innerText = "";
+    nameInput.value = "";
+    surnameInput.value = "";
+    ageInput.value = "";
+    addUserBtn.style.display = "inline-block";
+    editUserBtn.style.display = "none";
+  })
+});
