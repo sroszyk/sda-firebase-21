@@ -231,6 +231,8 @@ const ageInput = document.getElementById("age");
 const addUserBtn = document.getElementById("addUser");
 const usersList = document.getElementById("usersList");
 const usersCol = collection(db, "users");
+const editUserBtn = document.getElementById("editUser");
+const userIdHeader = document.getElementById("userId");
 
 addUserBtn.addEventListener("click", () => {
   addDoc(usersCol, {
@@ -243,9 +245,26 @@ addUserBtn.addEventListener("click", () => {
 
 getDocs(usersCol).then(docs => {
   docs.forEach(myDoc => {
+    const editBtn = document.createElement("button");
     const myLi = document.createElement("li");
+
     const myUser = myDoc.data();
+
     myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+    editBtn.innerText = "Edit";
+
+    editBtn.addEventListener("click", () => {
+      nameInput.value = myUser.name;
+      surnameInput.value = myUser.surname;
+      ageInput.value = myUser.age;
+      addUserBtn.style.display = "none";
+      editUserBtn.style.display = "inline-block";
+      userIdHeader.innerText = myDoc.id;
+    })
+
+    myLi.appendChild(editBtn);
     usersList.appendChild(myLi);
   });
 })
+
+
