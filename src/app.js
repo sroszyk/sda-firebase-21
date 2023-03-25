@@ -161,9 +161,12 @@ const storage = getStorage(app);
 //   }
 // });
 
+const albumsList = document.getElementById("albumsList");
 const storageRef = ref(storage);
 listAll(storageRef).then(res => {
   res.prefixes.forEach(pref => {
-    console.log(pref.name);
+    const albumOption = document.createElement("option");
+    albumOption.innerText = pref.name;
+    albumsList.appendChild(albumOption);
   })
 })
