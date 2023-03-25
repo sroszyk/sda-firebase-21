@@ -123,40 +123,47 @@ const storage = getStorage(app);
 // });
 
 
+// const storageRef = ref(storage);
+// listAll(storageRef).then(res => {
+//   const myOl = document.getElementById("photoList");
+
+//   for (let i = 0; i < res.items.length; i++) {
+//     const myLi = document.createElement("li");
+//     const myBtn = document.createElement("button");
+//     const myRemoveBtn = document.createElement("button");
+
+//     myBtn.addEventListener("click", () => {
+//       const imageRef = ref(storage, res.items[i].name);
+
+//       getDownloadURL(imageRef).then(url => {
+//         const myImg = document.getElementById("myImg");
+//         myImg.src = url;
+//         myImg.style.width = "200px";
+//       });
+//     })
+
+//     myRemoveBtn.addEventListener("click", () => {
+//       const imageRef = ref(storage, res.items[i].name);
+
+//       deleteObject(imageRef).then(() => {
+//         myOl.removeChild(myLi);
+//         console.log("USUNIĘTO!");
+//       });
+//     })
+
+//     myRemoveBtn.innerText = "Delete";
+//     myBtn.innerText = "Show photo!";
+//     myLi.innerText = res.items[i].name;
+
+//     myLi.appendChild(myBtn);
+//     myLi.appendChild(myRemoveBtn);
+//     myOl.appendChild(myLi);
+//   }
+// });
+
 const storageRef = ref(storage);
 listAll(storageRef).then(res => {
-  const myOl = document.getElementById("photoList");
-
-  for (let i = 0; i < res.items.length; i++) {
-    const myLi = document.createElement("li");
-    const myBtn = document.createElement("button");
-    const myRemoveBtn = document.createElement("button");
-
-    myBtn.addEventListener("click", () => {
-      const imageRef = ref(storage, res.items[i].name);
-
-      getDownloadURL(imageRef).then(url => {
-        const myImg = document.getElementById("myImg");
-        myImg.src = url;
-        myImg.style.width = "200px";
-      });
-    })
-
-    myRemoveBtn.addEventListener("click", () => {
-      const imageRef = ref(storage, res.items[i].name);
-
-      deleteObject(imageRef).then(() => {
-        myOl.removeChild(myLi);
-        console.log("USUNIĘTO!");
-      });
-    })
-
-    myRemoveBtn.innerText = "Delete";
-    myBtn.innerText = "Show photo!";
-    myLi.innerText = res.items[i].name;
-
-    myLi.appendChild(myBtn);
-    myLi.appendChild(myRemoveBtn);
-    myOl.appendChild(myLi);
-  }
-});
+  res.prefixes.forEach(pref => {
+    console.log(pref.name);
+  })
+})
