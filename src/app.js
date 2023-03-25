@@ -2,6 +2,7 @@ import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
+import { doc, getFirestore, setDoc } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+const db = getFirestore(app);
 
 // const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
 
@@ -161,44 +163,48 @@ const storage = getStorage(app);
 //   }
 // });
 
-const albumsList = document.getElementById("albumsList");
-const uploadPhotoBtn = document.getElementById("uploadPhoto");
-const fileInput = document.getElementById("fileInput");
-const showPhotosBtn = document.getElementById("showPhotos");
+// const albumsList = document.getElementById("albumsList");
+// const uploadPhotoBtn = document.getElementById("uploadPhoto");
+// const fileInput = document.getElementById("fileInput");
+// const showPhotosBtn = document.getElementById("showPhotos");
 
-uploadPhotoBtn.addEventListener("click", () => {
-  if (albumsList.value) {
-    const file = fileInput.files[0];
-    const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
-    uploadBytes(imageRef, file).then(() => console.log("SUKCES"));
-  }
+// uploadPhotoBtn.addEventListener("click", () => {
+//   if (albumsList.value) {
+//     const file = fileInput.files[0];
+//     const imageRef = ref(storage, `${albumsList.value}/${file.name}`);
+//     uploadBytes(imageRef, file).then(() => console.log("SUKCES"));
+//   }
+// });
+
+// showPhotosBtn.addEventListener("click", () => {
+//   const albumRef = ref(storage, albumsList.value);
+//   listAll(albumRef).then(res => {
+//     res.items.forEach(item => {
+//       const itemRef = ref(storage, item.fullPath);
+
+//       getDownloadURL(itemRef).then(url => {
+//         const img = document.createElement("img");
+//         img.src = url;
+//         img.style.width = "200px";
+//         document.body.appendChild(img);
+//       })
+//     })
+//   })
+// })
+
+// // document.body.appendChild(img);
+
+// const storageRef = ref(storage);
+// listAll(storageRef).then(res => {
+//   res.prefixes.forEach(pref => {
+//     const albumOption = document.createElement("option");
+//     albumOption.innerText = pref.name;
+//     albumsList.appendChild(albumOption);
+//   })
+// })
+
+
+const jkDoc = doc(db, "users", "JanKowalskiId");
+setDoc(jkDoc, {
+  age: 5
 });
-
-showPhotosBtn.addEventListener("click", () => {
-  const albumRef = ref(storage, albumsList.value);
-  listAll(albumRef).then(res => {
-    res.items.forEach(item => {
-      const itemRef = ref(storage, item.fullPath);
-
-      getDownloadURL(itemRef).then(url => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.style.width = "200px";
-        document.body.appendChild(img);
-      })
-    })
-  })
-})
-
-// document.body.appendChild(img);
-
-const storageRef = ref(storage);
-listAll(storageRef).then(res => {
-  res.prefixes.forEach(pref => {
-    const albumOption = document.createElement("option");
-    albumOption.innerText = pref.name;
-    albumsList.appendChild(albumOption);
-  })
-})
-
-
