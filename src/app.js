@@ -77,17 +77,17 @@ const storage = getStorage(app);
 // document.getElementById("myBtn").addEventListener("click", () => {
 //   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
-  // const file = document.getElementById("myFile").files[0];
-  // let fileName = file.name;
+// const file = document.getElementById("myFile").files[0];
+// let fileName = file.name;
 
-  // if (fileNameInput.value) {
-  //   fileName = fileNameInput.value;
-  // }
+// if (fileNameInput.value) {
+//   fileName = fileNameInput.value;
+// }
 
-  // const imageRef = ref(storage, folderName ,fileName);
+// const imageRef = ref(storage, folderName ,fileName);
 
-  // uploadBytes(imageRef, file).then(() => {
-  //   headerInfo.innerText = "Zdjęcie przesłano!";
+// uploadBytes(imageRef, file).then(() => {
+//   headerInfo.innerText = "Zdjęcie przesłano!";
 
 //     getDownloadURL(imageRef).then(url => {
 //       const img = document.getElementById("myPhoto");
@@ -164,6 +164,7 @@ const storage = getStorage(app);
 const albumsList = document.getElementById("albumsList");
 const uploadPhotoBtn = document.getElementById("uploadPhoto");
 const fileInput = document.getElementById("fileInput");
+const showPhotosBtn = document.getElementById("showPhotos");
 
 uploadPhotoBtn.addEventListener("click", () => {
   if (albumsList.value) {
@@ -172,6 +173,24 @@ uploadPhotoBtn.addEventListener("click", () => {
     uploadBytes(imageRef, file).then(() => console.log("SUKCES"));
   }
 });
+
+showPhotosBtn.addEventListener("click", () => {
+  const albumRef = ref(storage, albumsList.value);
+  listAll(albumRef).then(res => {
+    res.items.forEach(item => {
+      const itemRef = ref(storage, item.fullPath);
+
+      getDownloadURL(itemRef).then(url => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.style.width = "200px";
+        document.body.appendChild(img);
+      })
+    })
+  })
+})
+
+// document.body.appendChild(img);
 
 const storageRef = ref(storage);
 listAll(storageRef).then(res => {
