@@ -2,7 +2,7 @@ import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { doc, getFirestore, setDoc } from "firebase/firestore"
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -203,8 +203,49 @@ const db = getFirestore(app);
 //   })
 // })
 
+// const nameInput = document.getElementById("name");
+// const surnameInput = document.getElementById("surname");
+// const ageInput = document.getElementById("age");
+// const addUserBtn = document.getElementById("addUser");
 
-const jkDoc = doc(db, "users", "JanKowalskiId");
-setDoc(jkDoc, {
-  age: 5
-});
+// addUserBtn.addEventListener("click", () => {
+//   const jkDoc = doc(db, "users", `${nameInput.value}${surnameInput.value}${ageInput.value}`);
+//   setDoc(jkDoc, {
+//     name: nameInput.value,
+//     surname: surnameInput.value,
+//     age: ageInput.value
+//   }).then(() => console.log("SUKCES"))
+// })
+
+// const szymonDoc = doc(db, "users", "SzymonRoszyk29");
+// getDoc(szymonDoc).then(resDoc => {
+//   const szymon = resDoc.data();
+//   nameInput.value = szymon.name;
+//   surnameInput.value = szymon.surname;
+//   ageInput.value = szymon.age;
+// })
+
+const nameInput = document.getElementById("name");
+const surnameInput = document.getElementById("surname");
+const ageInput = document.getElementById("age");
+const addUserBtn = document.getElementById("addUser");
+const usersList = document.getElementById("usersList");
+const usersCol = collection(db, "users");
+
+addUserBtn.addEventListener("click", () => {
+  addDoc(usersCol, {
+    name: nameInput.value,
+    surname: surnameInput.value,
+    age: ageInput.value
+  });
+})
+
+
+getDocs(usersCol).then(docs => {
+  docs.forEach(myDoc => {
+    const myLi = document.createElement("li");
+    const myUser = myDoc.data();
+    myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+    usersList.appendChild(myLi);
+  });
+})
