@@ -77,17 +77,17 @@ const storage = getStorage(app);
 // document.getElementById("myBtn").addEventListener("click", () => {
 //   headerInfo.innerText = "Przesyłam zdjęcię....!";
 
-//   const file = document.getElementById("myFile").files[0];
-//   let fileName = file.name;
+  // const file = document.getElementById("myFile").files[0];
+  // let fileName = file.name;
 
-//   if (fileNameInput.value) {
-//     fileName = fileNameInput.value;
-//   }
+  // if (fileNameInput.value) {
+  //   fileName = fileNameInput.value;
+  // }
 
-//   const imageRef = ref(storage, fileName);
+  // const imageRef = ref(storage, folderName ,fileName);
 
-//   uploadBytes(imageRef, file).then(() => {
-//     headerInfo.innerText = "Zdjęcie przesłano!";
+  // uploadBytes(imageRef, file).then(() => {
+  //   headerInfo.innerText = "Zdjęcie przesłano!";
 
 //     getDownloadURL(imageRef).then(url => {
 //       const img = document.getElementById("myPhoto");
@@ -162,6 +162,14 @@ const storage = getStorage(app);
 // });
 
 const albumsList = document.getElementById("albumsList");
+const uploadPhotoBtn = document.getElementById("uploadPhoto");
+
+uploadPhotoBtn.addEventListener("click", () => {
+  if (albumsList.value) {
+    console.log(albumsList.value);
+  }
+});
+
 const storageRef = ref(storage);
 listAll(storageRef).then(res => {
   res.prefixes.forEach(pref => {
