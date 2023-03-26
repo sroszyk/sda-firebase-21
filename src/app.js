@@ -2,7 +2,7 @@ import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -225,77 +225,96 @@ const db = getFirestore(app);
 //   ageInput.value = szymon.age;
 // })
 
+// const nameInput = document.getElementById("name");
+// const surnameInput = document.getElementById("surname");
+// const ageInput = document.getElementById("age");
+// const addUserBtn = document.getElementById("addUser");
+// const usersList = document.getElementById("usersList");
+// const usersCol = collection(db, "users");
+// const editUserBtn = document.getElementById("editUser");
+// const userIdHeader = document.getElementById("userId");
+
+// addUserBtn.addEventListener("click", () => {
+//   addDoc(usersCol, {
+//     name: nameInput.value,
+//     surname: surnameInput.value,
+//     age: ageInput.value
+//   }).then(() => {
+//     generateUsersList();
+//   });
+// })
+
+// function generateUsersList() {
+//   getDocs(usersCol).then(docs => {
+//     usersList.innerHTML = "";
+//     docs.forEach(myDoc => {
+//       const editBtn = document.createElement("button");
+//       const deleteBtn = document.createElement("button");
+//       const myLi = document.createElement("li");
+
+//       const myUser = myDoc.data();
+
+//       myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+//       editBtn.innerText = "Edit";
+//       deleteBtn.innerText = "Delete";
+
+//       editBtn.addEventListener("click", () => {
+//         nameInput.value = myUser.name;
+//         surnameInput.value = myUser.surname;
+//         ageInput.value = myUser.age;
+//         addUserBtn.style.display = "none";
+//         editUserBtn.style.display = "inline-block";
+//         userIdHeader.innerText = myDoc.id;
+//       })
+
+//       deleteBtn.addEventListener("click", () => {
+//         const userDocRef = doc(db, "users", myDoc.id);
+//         deleteDoc(userDocRef).then(() => {
+//           console.log("USUNIETO!");
+//           generateUsersList();
+//         });
+//       })
+
+//       myLi.appendChild(editBtn);
+//       myLi.appendChild(deleteBtn);
+//       usersList.appendChild(myLi);
+//     });
+//   })
+// }
+// generateUsersList();
+
+// editUserBtn.addEventListener("click", () => {
+//   const userDoc = doc(db, "users", userIdHeader.innerText);
+//   updateDoc(userDoc, {
+//     name: nameInput.value,
+//     surname: surnameInput.value,
+//     age: ageInput.value
+//   }).then(() => {
+//     userIdHeader.innerText = "";
+//     nameInput.value = "";
+//     surnameInput.value = "";
+//     ageInput.value = "";
+//     addUserBtn.style.display = "inline-block";
+//     editUserBtn.style.display = "none";
+//     generateUsersList();
+//   })
+// });
+
 const nameInput = document.getElementById("name");
-const surnameInput = document.getElementById("surname");
-const ageInput = document.getElementById("age");
-const addUserBtn = document.getElementById("addUser");
+const searchBtn = document.getElementById("search");
 const usersList = document.getElementById("usersList");
-const usersCol = collection(db, "users");
-const editUserBtn = document.getElementById("editUser");
-const userIdHeader = document.getElementById("userId");
 
-addUserBtn.addEventListener("click", () => {
-  addDoc(usersCol, {
-    name: nameInput.value,
-    surname: surnameInput.value,
-    age: ageInput.value
-  }).then(() => {
-    generateUsersList();
-  });
-})
+searchBtn.addEventListener("click", () => {
+  const users = collection(db, "users");
+  const usersQuery = query(users, where("name", "==", nameInput.value));
 
-function generateUsersList() {
-  getDocs(usersCol).then(docs => {
+  getDocs(usersQuery).then(docs => {
     usersList.innerHTML = "";
     docs.forEach(myDoc => {
-      const editBtn = document.createElement("button");
-      const deleteBtn = document.createElement("button");
-      const myLi = document.createElement("li");
-
       const myUser = myDoc.data();
-
+      const myLi = document.createElement("li");
       myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
-      editBtn.innerText = "Edit";
-      deleteBtn.innerText = "Delete";
-
-      editBtn.addEventListener("click", () => {
-        nameInput.value = myUser.name;
-        surnameInput.value = myUser.surname;
-        ageInput.value = myUser.age;
-        addUserBtn.style.display = "none";
-        editUserBtn.style.display = "inline-block";
-        userIdHeader.innerText = myDoc.id;
-      })
-
-      deleteBtn.addEventListener("click", () => {
-        const userDocRef = doc(db, "users", myDoc.id);
-        deleteDoc(userDocRef).then(() => {
-          console.log("USUNIETO!");
-          generateUsersList();
-        });
-      })
-
-      myLi.appendChild(editBtn);
-      myLi.appendChild(deleteBtn);
       usersList.appendChild(myLi);
-    });
+    })
   })
-}
-generateUsersList();
-
-editUserBtn.addEventListener("click", () => {
-  const userDoc = doc(db, "users", userIdHeader.innerText);
-  updateDoc(userDoc, {
-    name: nameInput.value,
-    surname: surnameInput.value,
-    age: ageInput.value
-  }).then(() => {
-    userIdHeader.innerText = "";
-    nameInput.value = "";
-    surnameInput.value = "";
-    ageInput.value = "";
-    addUserBtn.style.display = "inline-block";
-    editUserBtn.style.display = "none";
-    generateUsersList();
-  })
-});
+})
