@@ -304,17 +304,19 @@ const nameInput = document.getElementById("name");
 const searchBtn = document.getElementById("search");
 const usersList = document.getElementById("usersList");
 
-searchBtn.addEventListener("click", () => {
-  const users = collection(db, "users");
-  const usersQuery = query(users, where("name", "==", nameInput.value));
+nameInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    const users = collection(db, "users");
+    const usersQuery = query(users, where("name", "==", nameInput.value));
 
-  getDocs(usersQuery).then(docs => {
-    usersList.innerHTML = "";
-    docs.forEach(myDoc => {
-      const myUser = myDoc.data();
-      const myLi = document.createElement("li");
-      myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
-      usersList.appendChild(myLi);
+    getDocs(usersQuery).then(docs => {
+      usersList.innerHTML = "";
+      docs.forEach(myDoc => {
+        const myUser = myDoc.data();
+        const myLi = document.createElement("li");
+        myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+        usersList.appendChild(myLi);
+      })
     })
-  })
+  }
 })
