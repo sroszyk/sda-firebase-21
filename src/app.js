@@ -393,7 +393,7 @@ ui.start('#firebaseui-auth-container', {
       EmailAuthProvider.PROVIDER_ID, 
       GoogleAuthProvider.PROVIDER_ID     
   ],
-  signInSuccessUrl: "http://localhost:8080/"
+  signInSuccessUrl: "https://sda-firebase-21.web.app/"
 });
 
 onAuthStateChanged(auth, (user) => {
@@ -403,9 +403,9 @@ onAuthStateChanged(auth, (user) => {
     messageTextInput.style.display = "block";
     signOutBtn.style.display = "inline-block";
   } else {
-    sendBtn.style.display = "none";
-    messageContainer.style.display = "none";
-    messageTextInput.style.display = "none";
-    signOutBtn.style.display = "none";
+    // sendBtn.style.display = "none";
+    // messageContainer.style.display = "none";
+    // messageTextInput.style.display = "none";
+    // signOutBtn.style.display = "none";
   }
 });
