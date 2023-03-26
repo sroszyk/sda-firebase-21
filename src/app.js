@@ -2,12 +2,14 @@ import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore"
+import { getDatabase, onChildAdded, onValue, push, ref as rdbRef, set } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
   authDomain: "sda-firebase-21.firebaseapp.com",
   projectId: "sda-firebase-21",
+  databaseURL: "https://sda-firebase-21-default-rtdb.europe-west1.firebasedatabase.app",
   storageBucket: "sda-firebase-21.appspot.com",
   messagingSenderId: "669851038876",
   appId: "1:669851038876:web:e4d993ab1a6ba5ead12959"
@@ -17,6 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const db = getFirestore(app);
+const rdb = getDatabase(app);
 
 // const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
 
@@ -300,23 +303,77 @@ const db = getFirestore(app);
 //   })
 // });
 
-const nameInput = document.getElementById("name");
-const searchBtn = document.getElementById("search");
-const usersList = document.getElementById("usersList");
+// const nameInput = document.getElementById("name");
+// const searchBtn = document.getElementById("search");
+// const usersList = document.getElementById("usersList");
 
-nameInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    const users = collection(db, "users");
-    const usersQuery = query(users, where("name", "==", nameInput.value));
+// nameInput.addEventListener("keydown", (event) => {
+//   if (event.key === "Enter") {
+//     const users = collection(db, "users");
+//     const usersQuery = query(users, where("name", "==", nameInput.value));
 
-    getDocs(usersQuery).then(docs => {
-      usersList.innerHTML = "";
-      docs.forEach(myDoc => {
-        const myUser = myDoc.data();
-        const myLi = document.createElement("li");
-        myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
-        usersList.appendChild(myLi);
-      })
-    })
-  }
+//     getDocs(usersQuery).then(docs => {
+//       usersList.innerHTML = "";
+//       docs.forEach(myDoc => {
+//         const myUser = myDoc.data();
+//         const myLi = document.createElement("li");
+//         myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+//         usersList.appendChild(myLi);
+//       })
+//     })
+//   }
+// })
+
+// const piotrDoc = doc(db, "users", "PiotrNowak34");
+// onSnapshot(piotrDoc, (doc) => {
+//   console.log(doc.data());
+// })
+
+// const janRef = rdbRef(rdb, "users/JanId");
+// set(janRef, {
+//   name: "Jan",
+//   surname: "Kowalski"
+// })
+
+// const usersRef = rdbRef(rdb, "users");
+// const janRef = push(usersRef);
+
+// set(janRef, {
+//   name: "NowyJan",
+//   surname: "NowyKowalski"
+// })
+
+// const usersRef = rdbRef(rdb, "users");
+// onChildAdded(usersRef, snapshot => {
+
+//   const myUsers = snapshot.val();
+//   console.log(myUsers);
+
+//   for(let prop in myUsers){
+//     console.log(prop);
+//   }
+// })
+
+const sendBtn = document.getElementById("send");
+const messageTextInput = document.getElementById("message");
+const messageContainer = document.getElementById("messageContainer");
+
+const messagesRef = rdbRef(rdb, "messages");
+
+onChildAdded(messagesRef, (messageSnapshot) => {
+  const mySpan = document.createElement("span");
+  const message = messageSnapshot.val();
+
+  mySpan.innerText = `${message.timestamp} --- ${message.text}`;
+
+  messageContainer.appendChild(mySpan);
+})
+
+sendBtn.addEventListener("click", () => {
+  const messageRef = push(messagesRef);
+
+  set(messageRef, {
+    text: messageTextInput.value,
+    timestamp: new Date().toISOString()
+  })
 })
