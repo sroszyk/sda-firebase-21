@@ -4,6 +4,8 @@ import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore"
 import { getDatabase, onChildAdded, onValue, push, ref as rdbRef, set } from "firebase/database";
+import { getAuth, EmailAuthProvider, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import * as firebaseui from 'firebaseui';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -20,6 +22,9 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const db = getFirestore(app);
 const rdb = getDatabase(app);
+
+const auth = getAuth(app);
+const ui = new firebaseui.auth.AuthUI(auth);
 
 // const url = "https://firebasestorage.googleapis.com/v0/b/sda-firebase-21.appspot.com/o/Zdj%C4%99cieCV.png?alt=media&token=8debca9e-3f19-49d2-b5dd-74f23ba75890";
 
@@ -377,3 +382,23 @@ sendBtn.addEventListener("click", () => {
     timestamp: new Date().toISOString()
   })
 })
+
+ui.start('#firebaseui-auth-container', {
+  signInOptions: [
+      EmailAuthProvider.PROVIDER_ID, 
+      GoogleAuthProvider.PROVIDER_ID     
+  ],
+  signInSuccessUrl: "http://localhost:8080/"
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    sendBtn.style.display = "inline-block";
+    messageContainer.style.display = "flex";
+    messageTextInput.style.display = "block";
+  } else {
+    sendBtn.style.display = "none";
+    messageContainer.style.display = "none";
+    messageTextInput.style.display = "none";
+  }
+});
