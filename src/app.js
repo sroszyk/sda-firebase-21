@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore"
 import { getDatabase, onChildAdded, onValue, push, ref as rdbRef, set } from "firebase/database";
-import { getAuth, EmailAuthProvider, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, EmailAuthProvider, onAuthStateChanged, GoogleAuthProvider, signOut } from "firebase/auth";
 import * as firebaseui from 'firebaseui';
 
 const firebaseConfig = {
@@ -362,8 +362,13 @@ const ui = new firebaseui.auth.AuthUI(auth);
 const sendBtn = document.getElementById("send");
 const messageTextInput = document.getElementById("message");
 const messageContainer = document.getElementById("messageContainer");
+const signOutBtn = document.getElementById("signOut");
 
 const messagesRef = rdbRef(rdb, "messages");
+
+signOutBtn.addEventListener("click", () => {
+  signOut(auth);
+})
 
 onChildAdded(messagesRef, (messageSnapshot) => {
   const mySpan = document.createElement("span");
@@ -396,9 +401,11 @@ onAuthStateChanged(auth, (user) => {
     sendBtn.style.display = "inline-block";
     messageContainer.style.display = "flex";
     messageTextInput.style.display = "block";
+    signOutBtn.style.display = "inline-block";
   } else {
     sendBtn.style.display = "none";
     messageContainer.style.display = "none";
     messageTextInput.style.display = "none";
+    signOutBtn.style.display = "none";
   }
 });
