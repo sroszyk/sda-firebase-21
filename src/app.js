@@ -2,7 +2,7 @@ import './../styles/styles.css';
 
 import { initializeApp } from "firebase/app";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaiX1VIEn2i68FEcHeqdFEIXloEqL3uFg",
@@ -239,33 +239,49 @@ addUserBtn.addEventListener("click", () => {
     name: nameInput.value,
     surname: surnameInput.value,
     age: ageInput.value
+  }).then(() => {
+    generateUsersList();
   });
 })
 
+function generateUsersList() {
+  getDocs(usersCol).then(docs => {
+    usersList.innerHTML = "";
+    docs.forEach(myDoc => {
+      const editBtn = document.createElement("button");
+      const deleteBtn = document.createElement("button");
+      const myLi = document.createElement("li");
 
-getDocs(usersCol).then(docs => {
-  docs.forEach(myDoc => {
-    const editBtn = document.createElement("button");
-    const myLi = document.createElement("li");
+      const myUser = myDoc.data();
 
-    const myUser = myDoc.data();
+      myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
+      editBtn.innerText = "Edit";
+      deleteBtn.innerText = "Delete";
 
-    myLi.innerText = `${myUser.name} ${myUser.surname} ${myUser.age}`;
-    editBtn.innerText = "Edit";
+      editBtn.addEventListener("click", () => {
+        nameInput.value = myUser.name;
+        surnameInput.value = myUser.surname;
+        ageInput.value = myUser.age;
+        addUserBtn.style.display = "none";
+        editUserBtn.style.display = "inline-block";
+        userIdHeader.innerText = myDoc.id;
+      })
 
-    editBtn.addEventListener("click", () => {
-      nameInput.value = myUser.name;
-      surnameInput.value = myUser.surname;
-      ageInput.value = myUser.age;
-      addUserBtn.style.display = "none";
-      editUserBtn.style.display = "inline-block";
-      userIdHeader.innerText = myDoc.id;
-    })
+      deleteBtn.addEventListener("click", () => {
+        const userDocRef = doc(db, "users", myDoc.id);
+        deleteDoc(userDocRef).then(() => {
+          console.log("USUNIETO!");
+          generateUsersList();
+        });
+      })
 
-    myLi.appendChild(editBtn);
-    usersList.appendChild(myLi);
-  });
-})
+      myLi.appendChild(editBtn);
+      myLi.appendChild(deleteBtn);
+      usersList.appendChild(myLi);
+    });
+  })
+}
+generateUsersList();
 
 editUserBtn.addEventListener("click", () => {
   const userDoc = doc(db, "users", userIdHeader.innerText);
@@ -280,5 +296,6 @@ editUserBtn.addEventListener("click", () => {
     ageInput.value = "";
     addUserBtn.style.display = "inline-block";
     editUserBtn.style.display = "none";
+    generateUsersList();
   })
 });
